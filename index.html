@@ -38,10 +38,12 @@
                     canvas.width = img.width;
                     canvas.height = img.height;
                     ctx.drawImage(img, 0, 0);
+
                     // Reset counter
                     document.getElementById('counter').innerText = '0';
+
                     // Draw grid
-                    const gridSize = 200;
+                    const gridSize = 50;
                     ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
                     for (let x = gridSize; x < canvas.width; x += gridSize) {
                         ctx.beginPath();
@@ -69,6 +71,10 @@
                             clickedSquares[squareKey] = true;
                             localStorage.setItem('clickedSquares', JSON.stringify(clickedSquares));
                             document.getElementById('counter').innerText = Object.keys(clickedSquares).length;
+                            
+                            // Shade clicked square
+                            ctx.fillStyle = 'rgba(255, 0, 0, 0.5)';
+                            ctx.fillRect(squareX * gridSize, squareY * gridSize, gridSize, gridSize);
                         }
                     });
                 };
