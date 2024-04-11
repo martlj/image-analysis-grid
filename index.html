@@ -67,7 +67,13 @@
                         const squareY = Math.floor(y / gridSize);
                         const squareKey = squareX + ',' + squareY;
                         const clickedSquares = JSON.parse(localStorage.getItem('clickedSquares')) || {};
-                        if (!clickedSquares[squareKey]) {
+                        if (clickedSquares[squareKey]) {
+                            delete clickedSquares[squareKey];
+                            document.getElementById('counter').innerText = Object.keys(clickedSquares).length;
+                            
+                            // Clear shaded square
+                            ctx.clearRect(squareX * gridSize, squareY * gridSize, gridSize, gridSize);
+                        } else {
                             clickedSquares[squareKey] = true;
                             localStorage.setItem('clickedSquares', JSON.stringify(clickedSquares));
                             document.getElementById('counter').innerText = Object.keys(clickedSquares).length;
