@@ -69,10 +69,11 @@
                         const clickedSquares = JSON.parse(localStorage.getItem('clickedSquares')) || {};
                         if (clickedSquares[squareKey]) {
                             delete clickedSquares[squareKey];
+                            localStorage.setItem('clickedSquares', JSON.stringify(clickedSquares));
                             document.getElementById('counter').innerText = Object.keys(clickedSquares).length;
                             
-                            // Clear shaded square
-                            ctx.clearRect(squareX * gridSize, squareY * gridSize, gridSize, gridSize);
+                            // Redraw canvas without shaded square
+                            redrawCanvas(canvas, ctx, gridSize, clickedSquares);
                         } else {
                             clickedSquares[squareKey] = true;
                             localStorage.setItem('clickedSquares', JSON.stringify(clickedSquares));
@@ -88,6 +89,40 @@
             };
             reader.readAsDataURL(file);
         });
+
+        function redrawCanvas(canvas, ctx, gridSize, clickedSquares) {
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Redraw image
+            const img = new Image();
+            img.onload = function() {
+                ctx.drawImage(img, 0, 0);
+                
+                // Draw grid
+                ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
+                for (let x = gridSize; x < canvas.width; x += gridSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, 0);
+                    ctx.lineTo(x, canvas.height);
+                    ctx.stroke();
+                }
+                for (let y = gridSize; y < canvas.height; y += gridSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(canvas.width, y);
+                    ctx.stroke();
+                }
+
+                // Shade clicked squares
+                Object.keys(clickedSquares).forEach(key => {
+                    const [squareX, squareY] = key.split(',').map(Number);
+                    ctx.fillStyle = 'rgba(255, 0, 0, 0.5)';
+                    ctx.fillRect(squareX * gridSize, squareY * gridSize, gridSize, gridSize);
+                });
+            };
+            img.src = canvas.toDataURL();
+        }
     </script>
 </body>
 </html>
