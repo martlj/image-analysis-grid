@@ -6,7 +6,7 @@
     <title>Grid Image Click Counter</title>
     <style>
         #imageContainer {
-            position: relative;
+            position: sticky;
             display: inline-block;
         }
         #gridCanvas {
@@ -17,12 +17,12 @@
     </style>
 </head>
 <body>
-    <h1>Grid Image Click Counter</h1>
+    <h1>Measuring Ice in the Arctic</h1>
     <input type="file" id="imageInput" accept="image/*">
     <div id="imageContainer">
-        <canvas id="gridCanvas"></canvas>
+        <canvas id="gridCanvas">Image Canvas</canvas>
     </div>
-    <p>Clicks Counter: <span id="counter">0</span></p>
+    <p>Square Counter: <span id="counter">0</span></p>
     <button id="resetCounter">Reset Counter</button>
 
     <script>
@@ -33,7 +33,7 @@
         }
 
         function drawGrid(ctx, gridSize, canvasWidth, canvasHeight) {
-            ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
+            ctx.strokeStyle = 'rgba(255, 0, 0, 1)';
             for (let x = gridSize; x < canvasWidth; x += gridSize) {
                 ctx.beginPath();
                 ctx.moveTo(x, 0);
@@ -73,6 +73,7 @@
             const reader = new FileReader();
             reader.onload = function(event) {
                 const img = new Image();
+                localStorage.removeItem('clickedSquares');
                 img.onload = function() {
                     const canvas = document.getElementById('gridCanvas');
                     const ctx = canvas.getContext('2d');
@@ -82,7 +83,7 @@
 
                     // Draw image and grid
                     drawImageOnCanvas(img, canvas, ctx);
-                    const gridSize = 100; // Double the original gridSize
+                    const gridSize = 77; 
                     drawGrid(ctx, gridSize, canvas.width, canvas.height);
 
                     // Track clicks
