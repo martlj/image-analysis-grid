@@ -5,25 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grid Image Click Counter</title>
     <style>
+        .container {
+            display: flex;
+        }
         #imageContainer {
             position: sticky;
             display: inline-block;
+            flex: 1;
         }
         #gridCanvas {
             position: absolute;
             top: 0;
             left: 0;
         }
+        .text-container {
+            flex: 1;
+            margin-left: 20px; /* Adjust margin as needed */
+        }
     </style>
 </head>
 <body>
     <h1>Measuring Ice in the Arctic</h1>
-    <input type="file" id="imageInput" accept="image/*">
-    <div id="imageContainer">
-        <canvas id="gridCanvas">Image Canvas</canvas>
+    <div class="container">
+        <div id="imageContainer">
+            <canvas id="gridCanvas">Image Canvas</canvas>
+        </div>
+        <div class="text-container">
+            <form id="imageForm">
+                <input type="radio" id="image1" name="image" value="1983.png">
+                <label for="image1">1983</label><br>
+                <input type="radio" id="image2" name="image" value="2003.png">
+                <label for="image2">2003</label><br>
+                <input type="radio" id="image3" name="image" value="2023.png">
+                <label for="image3">2023</label><br>
+            </form>
+            <p>Square Counter: <span id="counter">0</span></p>
+            <!-- <button id="resetCounter">Reset Counter</button> -->
+        </div>
     </div>
-    <p>Square Counter: <span id="counter">0</span></p>
-    <!-- <button id="resetCounter">Reset Counter</button> -->
 
     <script>
         function drawImageOnCanvas(img, canvas, ctx) {
@@ -66,57 +85,48 @@
             });
         }
 
-        document.getElementById('imageInput').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+        const imageForm = document.getElementById('imageForm');
+        const canvas = document.getElementById('gridCanvas');
+        const ctx = canvas.getContext('2d');
+        let img;
 
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                const img = new Image();
+        imageForm.addEventListener('change', function(event) {
+            const selectedImage = document.querySelector('input[name="image"]:checked').value;
+            img = new Image();
+            img.onload = function() {
                 localStorage.removeItem('clickedSquares');
-                img.onload = function() {
-                    const canvas = document.getElementById('gridCanvas');
-                    const ctx = canvas.getContext('2d');
-
-                    // Reset counter
-                    document.getElementById('counter').innerText = '0';
-
-                    // Draw image and grid
-                    drawImageOnCanvas(img, canvas, ctx);
-                    const gridSize = 77; 
-                    drawGrid(ctx, gridSize, canvas.width, canvas.height);
-
-                    // Track clicks
-                    const clickedSquares = JSON.parse(localStorage.getItem('clickedSquares')) || {};
-                    canvas.addEventListener('click', function(event) {
-                        const rect = canvas.getBoundingClientRect();
-                        const x = event.clientX - rect.left;
-                        const y = event.clientY - rect.top;
-                        const squareX = Math.floor(x / gridSize);
-                        const squareY = Math.floor(y / gridSize);
-                        const squareKey = squareX + ',' + squareY;
-                        if (clickedSquares[squareKey]) {
-                            delete clickedSquares[squareKey];
-                        } else {
-                            clickedSquares[squareKey] = true;
-                        }
-                        localStorage.setItem('clickedSquares', JSON.stringify(clickedSquares));
-                        document.getElementById('counter').innerText = Object.keys(clickedSquares).length;
-                        
-                        // Redraw canvas
-                        redrawCanvas(canvas, ctx, gridSize, img, clickedSquares);
-                    });
-                };
-                img.src = `images/${file.name}`; // Modified line to load images from the "images" folder
+                // Reset counter
+                document.getElementById('counter').innerText = '0';
+                // Draw image and grid
+                drawImageOnCanvas(img, canvas, ctx);
+                const gridSize = 77; 
+                drawGrid(ctx, gridSize, canvas.width, canvas.height);
+                // Track clicks
+                const clickedSquares = JSON.parse(localStorage.getItem('clickedSquares')) || {};
+                canvas.addEventListener('click', function(event) {
+                    const rect = canvas.getBoundingClientRect();
+                    const x = event.clientX - rect.left;
+                    const y = event.clientY - rect.top;
+                    const squareX = Math.floor(x / gridSize);
+                    const squareY = Math.floor(y / gridSize);
+                    const squareKey = squareX + ',' + squareY;
+                    if (clickedSquares[squareKey]) {
+                        delete clickedSquares[squareKey];
+                    } else {
+                        clickedSquares[squareKey] = true;
+                    }
+                    localStorage.setItem('clickedSquares', JSON.stringify(clickedSquares));
+                    document.getElementById('counter').innerText = Object.keys(clickedSquares).length;
+                    // Redraw canvas
+                    redrawCanvas(canvas, ctx, gridSize, img, clickedSquares);
+                });
             };
-            reader.readAsDataURL(file);
+            img.src = `images/${selectedImage}`; // Modified line to load images from the "images" folder
         });
 
         document.getElementById('resetCounter').addEventListener('click', function() {
             localStorage.removeItem('clickedSquares');
             document.getElementById('counter').innerText = '0';
-            const canvas = document.getElementById('gridCanvas');
-            const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
         });
     </script>
