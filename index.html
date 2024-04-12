@@ -107,7 +107,7 @@
                         redrawCanvas(canvas, ctx, gridSize, img, clickedSquares);
                     });
                 };
-                img.src = event.target.result;
+                img.src = `images/${file.name}`; // Modified line to load images from the "images" folder
             };
             reader.readAsDataURL(file);
         });
