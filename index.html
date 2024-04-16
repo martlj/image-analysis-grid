@@ -20,7 +20,7 @@
         }
         .text-container {
             flex: 1;
-            margin-left: 20px; /* Adjust margin as needed */
+            margin-left: 200px; /* Adjust margin as needed */
         }
     </style>
 </head>
@@ -32,12 +32,16 @@
         </div>
         <div class="text-container">
             <form id="imageForm">
-                <input type="radio" id="image1" name="image" value="1983.png">
-                <label for="image1">1983</label><br>
-                <input type="radio" id="image2" name="image" value="2003.png">
-                <label for="image2">2003</label><br>
-                <input type="radio" id="image3" name="image" value="2023.png">
-                <label for="image3">2023</label><br>
+                <input type="radio" id="image1" name="image" value="1980.png">
+                <label for="image1">1980</label><br>
+                <input type="radio" id="image2" name="image" value="1990.png">
+                <label for="image2">1990</label><br>
+                <input type="radio" id="image3" name="image" value="2000.png">
+                <label for="image3">2000</label><br>
+                <input type="radio" id="image4" name="image" value="2010.png">
+                <label for="image1">2010</label><br>
+                <input type="radio" id="image5" name="image" value="2020.png">
+                <label for="image2">2020</label><br>
             </form>
             <p>Square Counter: <span id="counter">0</span></p>
             <!-- <button id="resetCounter">Reset Counter</button> -->
@@ -99,7 +103,7 @@
                 document.getElementById('counter').innerText = '0';
                 // Draw image and grid
                 drawImageOnCanvas(img, canvas, ctx);
-                const gridSize = 77; 
+                const gridSize = 60; 
                 drawGrid(ctx, gridSize, canvas.width, canvas.height);
                 // Track clicks
                 const clickedSquares = JSON.parse(localStorage.getItem('clickedSquares')) || {};
