@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grid Image Click Counter</title>
+    <title>Arctic Ice measuring app</title>
     <style>
         .container {
             display: flex;
@@ -48,32 +48,7 @@
                 <input type="radio" id="image5" name="image" value="2023.png">
                 <label for="image5">2023</label><br>
             </form>
-            <!-- <form id="imageForm"> 
-                <input type="radio" id="image1a" name="image" value="1983a.png">
-                <label for="image1a">1983a</label><br>
-                <input type="radio" id="image2a" name="image" value="1993a.png">
-                <label for="image2a">1993a</label><br>
-                <input type="radio" id="image3a" name="image" value="2003a.png">
-                <label for="image3a">2003a</label><br>
-                <input type="radio" id="image4a" name="image" value="2013a.png">
-                <label for="image4a">2013a</label><br>
-                <input type="radio" id="image5a" name="image" value="2023a.png">
-                <label for="image5a">2023a</label><br>
-            </form>  -->
-           <!-- <form id="imageForm">
-                <input type="radio" id="image1" name="image" value="1980.png">
-                <label for="image1">1980</label><br>
-                <input type="radio" id="image2" name="image" value="1990.png">
-                <label for="image2">1990</label><br>
-                <input type="radio" id="image3" name="image" value="2000.png">
-                <label for="image3">2000</label><br>
-                <input type="radio" id="image4" name="image" value="2010.png">
-                <label for="image4">2010</label><br>
-                <input type="radio" id="image5" name="image" value="2020.png">
-                <label for="image5">2020</label><br>
-            </form> -->
             <p>Square Counter: <span id="counter">0</span></p>
-            <!-- <button id="resetCounter">Reset Counter</button> -->
         </div>
     </div>
 
@@ -157,10 +132,9 @@
             img.src = `images/${selectedImage}`; // Modified line to load images from the "images" folder
         });
 
-        document.getElementById('resetCounter').addEventListener('click', function() {
-            localStorage.removeItem('clickedSquares');
-            document.getElementById('counter').innerText = '0';
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Trigger click event on the first radio button after the page finishes loading
+        window.addEventListener('load', function() {
+            document.getElementById('image1').click();
         });
     </script>
 </body>
